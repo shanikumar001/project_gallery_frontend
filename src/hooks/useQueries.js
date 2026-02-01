@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
-
-const API_BASE = '/api';
+import { getApiBase } from '../lib/utils';
 
 function useApiHeaders() {
   const { getToken } = useAuth();
@@ -14,7 +13,7 @@ export function useGetAllProjects() {
   return useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/projects`);
+      const res = await fetch(`${getApiBase()}/projects`);
       if (!res.ok) throw new Error('Failed to fetch projects');
       return res.json();
     },
@@ -25,7 +24,7 @@ export function useUserProfile(userId) {
   return useQuery({
     queryKey: ['user', userId],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/users/${userId}`);
+      const res = await fetch(`${getApiBase()}/users/${userId}`);
       if (!res.ok) throw new Error('Failed to fetch user');
       return res.json();
     },
@@ -42,7 +41,7 @@ export function useUpdateProfile() {
       if (username !== undefined) formData.append('username', username);
       if (bio !== undefined) formData.append('bio', bio);
       if (profilePhoto) formData.append('profilePhoto', profilePhoto);
-      const res = await fetch(`${API_BASE}/users/me`, {
+      const res = await fetch(`${getApiBase()}/users/me`, {
         method: 'PUT',
         headers: { Authorization: getHeaders().Authorization },
         body: formData,
@@ -98,7 +97,7 @@ export function useAddProject() {
 
         xhr.addEventListener('error', () => reject(new Error('Network error')));
         xhr.addEventListener('abort', () => reject(new Error('Upload cancelled')));
-        xhr.open('POST', `${API_BASE}/projects`);
+        xhr.open('POST', `${getApiBase()}/projects`);
         if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         xhr.send(formData);
       });
@@ -113,7 +112,7 @@ export function useDeleteProject() {
 
   return useMutation({
     mutationFn: async (projectId) => {
-      const res = await fetch(`${API_BASE}/projects/${projectId}`, {
+      const res = await fetch(`${getApiBase()}/projects/${projectId}`, {
         method: 'DELETE',
         headers: getHeaders(),
       });
@@ -136,7 +135,7 @@ export function useLikeProject() {
 
   return useMutation({
     mutationFn: async ({ projectId, liked }) => {
-      const res = await fetch(`${API_BASE}/projects/${projectId}/like`, {
+        const res = await fetch(`${getApiBase()}/projects/${projectId}/like`, {
         method: liked ? 'DELETE' : 'POST',
         headers: getHeaders(),
       });
@@ -153,7 +152,7 @@ export function useSaveProject() {
 
   return useMutation({
     mutationFn: async ({ projectId, saved }) => {
-      const res = await fetch(`${API_BASE}/projects/${projectId}/save`, {
+        const res = await fetch(`${getApiBase()}/projects/${projectId}/save`, {
         method: saved ? 'DELETE' : 'POST',
         headers: getHeaders(),
       });
@@ -170,7 +169,7 @@ export function useAddComment() {
 
   return useMutation({
     mutationFn: async ({ projectId, text }) => {
-      const res = await fetch(`${API_BASE}/projects/${projectId}/comments`, {
+      const res = await fetch(`${getApiBase()}/projects/${projectId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...getHeaders() },
         body: JSON.stringify({ text }),
@@ -190,7 +189,7 @@ export function useConnections() {
   return useQuery({
     queryKey: ['connections'],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/users/connections/list`, { headers: getHeaders() });
+      const res = await fetch(`${getApiBase()}/users/connections/list`, { headers: getHeaders() });
       if (!res.ok) throw new Error('Failed to fetch connections');
       return res.json();
     },
@@ -204,7 +203,7 @@ export function useConnect() {
 
   return useMutation({
     mutationFn: async (userId) => {
-      const res = await fetch(`${API_BASE}/users/${userId}/connect`, {
+      const res = await fetch(`${getApiBase()}/users/${userId}/connect`, {
         method: 'POST',
         headers: getHeaders(),
       });
@@ -227,7 +226,7 @@ export function useIsConnected(userId) {
   return useQuery({
     queryKey: ['connected', userId],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/users/${userId}/connected`, { headers: getHeaders() });
+      const res = await fetch(`${getApiBase()}/users/${userId}/connected`, { headers: getHeaders() });
       if (!res.ok) return false;
       const data = await res.json();
       return data.connected;
@@ -243,7 +242,7 @@ export function useFollowUser() {
 
   return useMutation({
     mutationFn: async ({ userId, following, requested }) => {
-      const res = await fetch(`${API_BASE}/users/${userId}/follow`, {
+      const res = await fetch(`${getApiBase()}/users/${userId}/follow`, {
         method: following || requested ? 'DELETE' : 'POST',
         headers: getHeaders(),
       });
@@ -266,7 +265,7 @@ export function useFollowStatus(userId) {
   return useQuery({
     queryKey: ['follow-status', userId],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/users/${userId}/follow-status`, { headers: getHeaders() });
+      const res = await fetch(`${getApiBase()}/users/${userId}/follow-status`, { headers: getHeaders() });
       if (!res.ok) return { following: false, requested: false };
       return res.json();
     },
@@ -281,7 +280,7 @@ export function useFollowRequests() {
   return useQuery({
     queryKey: ['follow-requests'],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/users/me/follow-requests`, { headers: getHeaders() });
+      const res = await fetch(`${getApiBase()}/users/me/follow-requests`, { headers: getHeaders() });
       if (!res.ok) throw new Error('Failed to fetch requests');
       return res.json();
     },
@@ -295,7 +294,7 @@ export function useAcceptFollowRequest() {
 
   return useMutation({
     mutationFn: async (requestId) => {
-      const res = await fetch(`${API_BASE}/users/follow-requests/${requestId}/accept`, {
+      const res = await fetch(`${getApiBase()}/users/follow-requests/${requestId}/accept`, {
         method: 'POST',
         headers: getHeaders(),
       });
@@ -315,7 +314,7 @@ export function useDeclineFollowRequest() {
 
   return useMutation({
     mutationFn: async (requestId) => {
-      const res = await fetch(`${API_BASE}/users/follow-requests/${requestId}/decline`, {
+      const res = await fetch(`${getApiBase()}/users/follow-requests/${requestId}/decline`, {
         method: 'POST',
         headers: getHeaders(),
       });
@@ -330,7 +329,7 @@ export function useFollowersList(userId) {
   return useQuery({
     queryKey: ['followers', userId],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/users/${userId}/followers`);
+      const res = await fetch(`${getApiBase()}/users/${userId}/followers`);
       if (!res.ok) throw new Error('Failed to fetch followers');
       return res.json();
     },
@@ -342,7 +341,7 @@ export function useFollowingList(userId) {
   return useQuery({
     queryKey: ['following-list', userId],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/users/${userId}/following`);
+      const res = await fetch(`${getApiBase()}/users/${userId}/following`);
       if (!res.ok) throw new Error('Failed to fetch following');
       return res.json();
     },
@@ -358,7 +357,7 @@ export function useConversations() {
   return useQuery({
     queryKey: ['conversations'],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/messages/conversations`, { headers: getHeaders() });
+      const res = await fetch(`${getApiBase()}/messages/conversations`, { headers: getHeaders() });
       if (!res.ok) throw new Error('Failed to fetch conversations');
       return res.json();
     },
@@ -373,7 +372,7 @@ export function useUnreadCount() {
   return useQuery({
     queryKey: ['unread-count'],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/messages/unread-count`, { headers: getHeaders() });
+      const res = await fetch(`${getApiBase()}/messages/unread-count`, { headers: getHeaders() });
       if (!res.ok) return { count: 0 };
       const data = await res.json();
       return data;
@@ -388,7 +387,7 @@ export function useMarkMessagesRead() {
 
   return useMutation({
     mutationFn: async (withUserId) => {
-      const res = await fetch(`${API_BASE}/messages/read`, {
+      const res = await fetch(`${getApiBase()}/messages/read`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...getHeaders() },
         body: JSON.stringify({ with: withUserId }),
@@ -409,7 +408,7 @@ export function useMessages(withUserId) {
   return useQuery({
     queryKey: ['messages', withUserId],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE}/messages?with=${withUserId}`, { headers: getHeaders() });
+      const res = await fetch(`${getApiBase()}/messages?with=${withUserId}`, { headers: getHeaders() });
       if (!res.ok) throw new Error('Failed to fetch messages');
       return res.json();
     },
@@ -423,7 +422,7 @@ export function useSendMessage() {
 
   return useMutation({
     mutationFn: async ({ toUserId, text }) => {
-      const res = await fetch(`${API_BASE}/messages`, {
+      const res = await fetch(`${getApiBase()}/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...getHeaders() },
         body: JSON.stringify({ toUserId, text }),

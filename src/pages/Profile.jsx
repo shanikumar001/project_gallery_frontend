@@ -20,6 +20,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import ProjectCard from '../components/ProjectCard';
 import { Navigate } from 'react-router-dom';
+import { getMediaUrl } from '../lib/utils';
 import { Camera, UserCheck, X, Users, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -50,7 +51,7 @@ export default function Profile() {
       .toUpperCase()
       .slice(0, 2) || 'U';
 
-  const photoUrl = user?.profilePhoto?.startsWith('/') ? `${window.location.origin}${user.profilePhoto}` : user?.profilePhoto;
+  const photoUrl = getMediaUrl(user?.profilePhoto);
 
   const startEditing = () => {
     setEditName(user?.name ?? '');
@@ -306,7 +307,7 @@ export default function Profile() {
                     onClick={(e) => e.preventDefault()}
                   >
                     <Avatar className="h-10 w-10 shrink-0">
-                      <AvatarImage src={req.fromUser?.profilePhoto?.startsWith('/') ? `${window.location.origin}${req.fromUser.profilePhoto}` : req.fromUser?.profilePhoto} />
+                      <AvatarImage src={getMediaUrl(req.fromUser?.profilePhoto)} />
                       <AvatarFallback>
                         {(req.fromUser?.name || 'U').slice(0, 2).toUpperCase()}
                       </AvatarFallback>
@@ -372,7 +373,7 @@ export default function Profile() {
                     onClick={() => setListModal(null)}
                   >
                     <Avatar className="h-10 w-10 shrink-0">
-                      <AvatarImage src={u.profilePhoto?.startsWith('/') ? `${window.location.origin}${u.profilePhoto}` : u.profilePhoto} />
+                      <AvatarImage src={getMediaUrl(u.profilePhoto)} />
                       <AvatarFallback>{(u.name || 'U').slice(0, 2).toUpperCase()}</AvatarFallback>
                     </Avatar>
                     <span className="font-medium">{u.name}</span>

@@ -6,9 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { LogIn } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { getApiBase } from '../lib/utils';
 import { toast } from 'sonner';
-
-const API_BASE = '/api';
 
 export default function Login() {
   const [emailOrUsername, setEmailOrUsername] = useState('');
@@ -35,7 +34,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
+      const res = await fetch(`${getApiBase()}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -61,7 +60,7 @@ export default function Login() {
   };
 
   const handleGoogleSignIn = () => {
-    window.location.href = '/api/auth/google';
+    window.location.href = `${getApiBase()}/auth/google`;
   };
 
   return (

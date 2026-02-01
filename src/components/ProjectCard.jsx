@@ -22,6 +22,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { getMediaUrl } from "../lib/utils";
 import {
   useLikeProject,
   useSaveProject,
@@ -102,9 +103,7 @@ export default function ProjectCard({ project, showActions = true, showDeleteBut
       .toUpperCase()
       .slice(0, 2) || "U";
 
-  const ownerPhotoUrl = project.user?.profilePhoto?.startsWith("/")
-    ? `${window.location.origin}${project.user.profilePhoto}`
-    : project.user?.profilePhoto;
+  const ownerPhotoUrl = getMediaUrl(project.user?.profilePhoto);
 
   const handleMessage = (e) => {
     e.preventDefault();

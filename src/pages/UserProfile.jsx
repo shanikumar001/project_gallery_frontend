@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { getMediaUrl } from '../lib/utils';
 import {
   useUserProfile,
   useFollowUser,
@@ -31,9 +32,7 @@ export default function UserProfile({ userId }) {
       .toUpperCase()
       .slice(0, 2) || '?';
 
-  const photoUrl = profile?.profilePhoto?.startsWith('/')
-    ? `${window.location.origin}${profile.profilePhoto}`
-    : profile?.profilePhoto;
+  const photoUrl = getMediaUrl(profile?.profilePhoto);
 
   const handleMessage = () => {
     if (!user) {

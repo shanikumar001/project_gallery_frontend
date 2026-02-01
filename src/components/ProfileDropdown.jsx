@@ -12,6 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useUserProfile } from "../hooks/useQueries";
+import { getMediaUrl } from "../lib/utils";
 
 export default function ProfileDropdown({ user, logout }) {
   const { data: profile } = useUserProfile(user?.id);
@@ -28,9 +29,7 @@ export default function ProfileDropdown({ user, logout }) {
     );
   };
 
-  const photoUrl = user?.profilePhoto?.startsWith("/")
-    ? `${window.location.origin}${user.profilePhoto}`
-    : user?.profilePhoto;
+  const photoUrl = getMediaUrl(user?.profilePhoto);
 
   return (
     <DropdownMenu>

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useConversations, useMessages, useSendMessage, useMarkMessagesRead, useUserProfile } from '../hooks/useQueries';
+import { getMediaUrl } from '../lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -63,8 +64,7 @@ export default function Chat() {
     );
   };
 
-  const photoUrl = (photo) =>
-    photo?.startsWith('/') ? `${window.location.origin}${photo}` : photo;
+  const photoUrl = (photo) => getMediaUrl(photo);
 
   return (
     <main className="flex flex-col h-[calc(100vh-4rem)] max-w-4xl mx-auto">

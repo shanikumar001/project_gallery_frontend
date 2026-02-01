@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const apiUrl = env.VITE_API_URL || '';
+  const apiUrl = env.VITE_API_URL || 'http://localhost:4000';
 
   return {
     plugins: [react()],

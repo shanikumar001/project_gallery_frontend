@@ -6,9 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { UserPlus, Mail, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { getApiBase } from '../lib/utils';
 import { toast } from 'sonner';
-
-const API_BASE = '/api';
 
 export default function Signup() {
   const [step, setStep] = useState(1);
@@ -30,7 +29,7 @@ export default function Signup() {
     }
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/auth/send-otp`, {
+      const res = await fetch(`${getApiBase()}/auth/send-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim().toLowerCase() }),
@@ -80,7 +79,7 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/auth/signup`, {
+      const res = await fetch(`${getApiBase()}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -246,7 +245,7 @@ export default function Signup() {
               type="button"
               variant="outline"
               className="w-full gap-2"
-              onClick={() => (window.location.href = '/api/auth/google')}
+              onClick={() => (window.location.href = `${getApiBase()}/auth/google`)}
               disabled={loading}
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
