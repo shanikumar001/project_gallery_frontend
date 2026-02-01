@@ -16,7 +16,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: 'https://project-gallery-backend-yra4.onrender.com',
         changeOrigin: true,
       },
     },
