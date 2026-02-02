@@ -43,10 +43,6 @@ export default function UploadProject() {
         return;
       }
 
-      // if (file.type.startsWith('image/')) {
-      //   setIsCropping(true);
-      // }
-
 
       setSelectedFile(file);
       const url = URL.createObjectURL(file);
